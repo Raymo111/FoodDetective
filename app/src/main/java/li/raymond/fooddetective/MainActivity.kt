@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.view.Menu
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.annotation.RequiresApi
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.navigation.NavigationView
 import androidx.navigation.findNavController
@@ -69,18 +68,6 @@ class MainActivity : AppCompatActivity() {
         // Request camera permissions
         if (!allPermissionsGranted()) {
             requestPermissions()
-        }
-
-        // Initialize Tessearct data
-        val tessData = File(filesDir, "tessdata")
-        if (!tessData.exists()) {
-            tessData.mkdirs()
-
-            // Copy over trained data
-            val trainedData = File(tessData, "eng.traineddata")
-            trainedData.writeBytes(
-                resources.openRawResource(R.raw.eng_traineddata).readBytes()
-            )
         }
 
         // Initialize captured images directory

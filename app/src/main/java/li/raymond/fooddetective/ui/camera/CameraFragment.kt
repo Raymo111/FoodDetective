@@ -31,6 +31,7 @@ import java.util.Locale
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 import kotlinx.coroutines.tasks.await
+import li.raymond.fooddetective.BuildConfig
 
 class CameraFragment : Fragment() {
 
@@ -38,6 +39,8 @@ class CameraFragment : Fragment() {
 
     private var imageCapture: ImageCapture? = null
     private lateinit var cameraExecutor: ExecutorService
+
+    private val OPENAI_API_KEY = BuildConfig.OPENAI_KEY
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -76,19 +79,23 @@ class CameraFragment : Fragment() {
         }
     }
 
+    private suspend fun chatGPTit(input: String): String {
+        return ""
+    }
+
     private fun takePhoto() {
         // Get a stable reference of the modifiable image capture use case
         val imageCapture = imageCapture ?: return
 
         // Create time stamped name and MediaStore entry.
         val name = SimpleDateFormat(FILENAME_FORMAT, Locale.US).format(System.currentTimeMillis())
-        val contentValues = ContentValues().apply {
-            put(MediaStore.MediaColumns.DISPLAY_NAME, name)
-            put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg")
-            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.P) {
-                put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/FoodDetective")
-            }
-        }
+//        val contentValues = ContentValues().apply {
+//            put(MediaStore.MediaColumns.DISPLAY_NAME, name)
+//            put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg")
+//            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.P) {
+//                put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/FoodDetective")
+//            }
+//        }
 
         // Create output options object which contains file + metadata
         val outputOptions = ImageCapture.OutputFileOptions.Builder(
@@ -115,6 +122,7 @@ class CameraFragment : Fragment() {
                         launch {
                             val text = ocrPhoto(output.savedUri!!)
                             Log.d(TAG, "OCR result: $text")
+                            val res = chatGPTit(text)
                         }
                     }
                 }

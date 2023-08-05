@@ -7,5 +7,4 @@
 
 Resources (including code used):
 - CameraX API reference tutorial (https://developer.android.com/codelabs/camerax-getting-started)
-- Tesseract4Android (https://github.com/adaptech-cz/Tesseract4Android)
-- Tesseract data (https://github.com/tesseract-ocr/tessdata/raw/4.0.0/eng.traineddata)
+- MLKit OCR reference tutorial (https://developers.google.com/ml-kit/vision/text-recognition/v2/android)

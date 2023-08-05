@@ -1,11 +1,18 @@
+import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
 }
 
+val key: String = gradleLocalProperties(rootDir).getProperty("OPENAI_KEY")
+
 android {
     namespace = "li.raymond.fooddetective"
     compileSdk = 33
+    buildFeatures {
+        buildConfig = true
+    }
 
     defaultConfig {
         applicationId = "li.raymond.fooddetective"
@@ -18,12 +25,16 @@ android {
     }
 
     buildTypes {
+        debug {
+            buildConfigField("String", "OPENAI_KEY", key)
+        }
         release {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            buildConfigField("String", "OPENAI_KEY", key)
         }
     }
     compileOptions {
@@ -63,4 +74,7 @@ dependencies {
     // Google vision text recognition
     implementation("com.google.mlkit:text-recognition:16.0.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.6.4")
+
+    // OpenAI
+    implementation("com.aallam.openai:openai-client:3.3.0")
 }
