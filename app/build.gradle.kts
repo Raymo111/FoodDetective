@@ -40,7 +40,7 @@ android {
 
 dependencies {
 
-    implementation("androidx.core:core-ktx:1.9.0")
+    implementation("androidx.core:core-ktx:1.10.1")
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.android.material:material:1.9.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
@@ -60,6 +60,7 @@ dependencies {
     implementation("androidx.camera:camera-view:1.0.0-alpha31")
     implementation("androidx.camera:camera-extensions:1.0.0-alpha31")
 
-    // Tesseract4Android
-    implementation("cz.adaptech.tesseract4android:tesseract4android-openmp:4.5.0")
+    // Google vision text recognition
+    implementation("com.google.mlkit:text-recognition:16.0.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.6.4")
 }

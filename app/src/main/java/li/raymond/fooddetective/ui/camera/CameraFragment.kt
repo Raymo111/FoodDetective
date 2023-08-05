@@ -1,7 +1,6 @@
 package li.raymond.fooddetective.ui.camera
 
 import android.content.ContentValues
-import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -18,7 +17,11 @@ import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import com.googlecode.tesseract.android.TessBaseAPI
+import com.google.mlkit.vision.common.InputImage
+import com.google.mlkit.vision.text.TextRecognition
+import com.google.mlkit.vision.text.latin.TextRecognizerOptions
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import li.raymond.fooddetective.MainActivity.Companion.FILENAME_FORMAT
 import li.raymond.fooddetective.MainActivity.Companion.TAG
 import li.raymond.fooddetective.databinding.FragmentCameraBinding
@@ -27,6 +30,7 @@ import java.text.SimpleDateFormat
 import java.util.Locale
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
+import kotlinx.coroutines.tasks.await
 
 class CameraFragment : Fragment() {
 
@@ -53,15 +57,22 @@ class CameraFragment : Fragment() {
         return root
     }
 
-    private fun ocrPhoto(photo: File) {
-        TessBaseAPI().apply {
-            val path = requireContext().filesDir.absolutePath
-            init(path, "eng")
-            setImage(photo)
-            val ocrText = utF8Text
-            Log.d(TAG, "OCR Text: $ocrText")
-            Toast.makeText(requireContext(), ocrText, Toast.LENGTH_LONG).show()
-            recycle()
+    private suspend fun ocrPhoto(photoURI: Uri): String {
+        val recognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
+        val image = InputImage.fromFilePath(requireContext(), photoURI)
+        var res = ""
+        return try {
+            val visionText = recognizer.process(image).await()
+            visionText.textBlocks.forEach { block ->
+                block.lines.forEach { line ->
+                    res += line.text + " "
+                }
+            }
+            Log.d(TAG, "OCR success, result: $res")
+            res
+        } catch (e: Exception) {
+            Log.e(TAG, "OCR failed: ${e.message}", e)
+            ""
         }
     }
 
@@ -100,7 +111,12 @@ class CameraFragment : Fragment() {
                     Log.d(TAG, msg)
 
                     // OCR photo
-                    ocrPhoto(File(output.savedUri!!.path!!))
+                    runBlocking {
+                        launch {
+                            val text = ocrPhoto(output.savedUri!!)
+                            Log.d(TAG, "OCR result: $text")
+                        }
+                    }
                 }
             })
     }

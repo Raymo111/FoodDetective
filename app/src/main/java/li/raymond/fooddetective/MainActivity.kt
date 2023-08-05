@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.navigation.NavigationView
 import androidx.navigation.findNavController
@@ -116,6 +117,9 @@ class MainActivity : AppCompatActivity() {
         private val REQUIRED_PERMISSIONS = mutableListOf(
             Manifest.permission.CAMERA
         ).apply {
+            if (Build.VERSION_CODES.TIRAMISU <= Build.VERSION.SDK_INT) {
+                add(Manifest.permission.READ_MEDIA_IMAGES)
+            }
             if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
                 add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
             }
