@@ -5,7 +5,6 @@
 	<string name="nav_header_title">Food Detective</string>
 	<string name="nav_header_subtitle">Raymond Li</string>
 	<string name="nav_header_desc">Navigation header</string>
-	<string name="action_settings">Settings</string>
 
 	<string name="menu_home">Detect</string>
 	<string name="menu_history">History</string>
