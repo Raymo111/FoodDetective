@@ -1,10 +1,7 @@
 package li.raymond.fooddetective.ui.camera
 
-import android.content.ContentValues
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
-import android.provider.MediaStore
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -17,11 +14,11 @@ import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.aallam.openai.api.BetaOpenAI
 import com.aallam.openai.api.chat.ChatCompletionRequest
 import com.aallam.openai.api.chat.ChatMessage
 import com.aallam.openai.api.chat.ChatRole
-import com.aallam.openai.api.completion.CompletionRequest
 import com.aallam.openai.api.model.ModelId
 import com.aallam.openai.client.OpenAI
 import com.google.mlkit.vision.common.InputImage
@@ -39,6 +36,7 @@ import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 import kotlinx.coroutines.tasks.await
 import li.raymond.fooddetective.BuildConfig
+import li.raymond.fooddetective.R
 
 class CameraFragment : Fragment() {
 
@@ -155,9 +153,16 @@ Each ingredient result should be about 30 words."""
                         launch {
                             val text = ocrPhoto(output.savedUri!!)
                             Log.d(TAG, "OCR result: $text")
+                            Toast.makeText(baseContext, text, Toast.LENGTH_LONG).show()
                             val res = chatGPTit(text)
                             Log.d(TAG, "ChatGPT result: $res")
-                            Toast.makeText(baseContext, res, Toast.LENGTH_LONG).show()
+
+                            // Save result to file
+                            val file = File(baseContext.filesDir, "captures/$name.txt")
+                            file.writeText(res)
+
+                            // Redirect to gallery fragment
+                            findNavController().navigate(R.id.nav_history)
                         }
                     }
                 }

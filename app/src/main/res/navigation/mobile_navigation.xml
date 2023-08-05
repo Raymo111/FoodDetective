@@ -12,14 +12,8 @@
 			tools:layout="@layout/fragment_camera" />
 
 	<fragment
-			android:id="@+id/nav_gallery"
-			android:name="li.raymond.fooddetective.ui.gallery.GalleryFragment"
-			android:label="@string/menu_gallery"
-			tools:layout="@layout/fragment_gallery" />
-
-	<fragment
-			android:id="@+id/nav_slideshow"
-			android:name="li.raymond.fooddetective.ui.slideshow.SlideshowFragment"
-			android:label="@string/menu_slideshow"
-			tools:layout="@layout/fragment_slideshow" />
+			android:id="@+id/nav_history"
+			android:name="li.raymond.fooddetective.ui.history.HistoryFragment"
+			android:label="@string/menu_history"
+			tools:layout="@layout/fragment_history" />
 </navigation>
