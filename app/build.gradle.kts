@@ -52,10 +52,14 @@ dependencies {
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
 
+    // CameraX
     val cameraxVersion = "1.2.2"
     implementation("androidx.camera:camera-core:$cameraxVersion")
     implementation("androidx.camera:camera-camera2:$cameraxVersion")
     implementation("androidx.camera:camera-lifecycle:$cameraxVersion")
     implementation("androidx.camera:camera-view:1.0.0-alpha31")
     implementation("androidx.camera:camera-extensions:1.0.0-alpha31")
+
+    // Tesseract4Android
+    implementation("cz.adaptech.tesseract4android:tesseract4android-openmp:4.5.0")
 }

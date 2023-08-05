@@ -6,5 +6,6 @@
 [ ] Save past queries for reference
 
 Resources (including code used):
-- https://developer.android.com/codelabs/camerax-getting-started
+- CameraX API reference tutorial (https://developer.android.com/codelabs/camerax-getting-started)
 - Tesseract4Android (https://github.com/adaptech-cz/Tesseract4Android)
+- Tesseract data (https://github.com/tesseract-ocr/tessdata/raw/4.0.0/eng.traineddata)

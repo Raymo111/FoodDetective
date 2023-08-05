@@ -18,6 +18,7 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import li.raymond.fooddetective.databinding.ActivityMainBinding
+import java.io.File
 
 class MainActivity : AppCompatActivity() {
 
@@ -67,6 +68,24 @@ class MainActivity : AppCompatActivity() {
         // Request camera permissions
         if (!allPermissionsGranted()) {
             requestPermissions()
+        }
+
+        // Initialize Tessearct data
+        val tessData = File(filesDir, "tessdata")
+        if (!tessData.exists()) {
+            tessData.mkdirs()
+
+            // Copy over trained data
+            val trainedData = File(tessData, "eng.traineddata")
+            trainedData.writeBytes(
+                resources.openRawResource(R.raw.eng_traineddata).readBytes()
+            )
+        }
+
+        // Initialize captured images directory
+        val capturedImages = File(filesDir, "captures")
+        if (!capturedImages.exists()) {
+            capturedImages.mkdirs()
         }
     }
 
