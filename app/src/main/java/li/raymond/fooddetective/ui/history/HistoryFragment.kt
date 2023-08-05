@@ -16,6 +16,7 @@ import li.raymond.fooddetective.R
 import li.raymond.fooddetective.databinding.FragmentHistoryBinding
 import java.io.File
 
+
 class HistoryFragment : Fragment() {
 
     private var _binding: FragmentHistoryBinding? = null
@@ -39,12 +40,13 @@ class HistoryFragment : Fragment() {
         // Load all saved captures: captures/$name.txt
         val dir = requireContext().filesDir.path + "/captures"
         val files = File(dir).listFiles()
+        val padding = resources.getDimensionPixelOffset(R.dimen.padding)
 
         // Sort files newest first
         if (files == null || files.isEmpty()) {
             listcontainer.addView(TextView(requireContext()).apply {
                 text = context.getString(R.string.no_captures_yet)
-                setPadding(50, 50, 0, 0)
+                setPadding(padding, padding, 0, 0)
             })
         } else {
             files.sort()
@@ -54,24 +56,25 @@ class HistoryFragment : Fragment() {
                 if (name.endsWith(".jpg") || name.endsWith(".png")) {
                     listcontainer.addView(ImageView(requireContext()).apply {
                         setImageURI(file.toUri())
+                        setPaddingRelative(padding, 0, padding, 0)
                     })
                 } else if (name.endsWith(".txt")) {
                     listcontainer.addView(TextView(requireContext()).apply {
                         text = name.removeSuffix(".txt")
                         setTypeface(null, Typeface.BOLD)
-                        setPadding(50, 50, 50, 0)
+                        setPaddingRelative(padding, padding, padding, padding)
                     })
                     val res = file.readText()
                     listcontainer.addView(TextView(requireContext()).apply {
                         text = res
-                        setPadding(50, 10, 50, 50)
+                        setPadding(padding, padding / 5, padding, padding)
                     })
                 }
             }
 
             // Add padding at the end
             listcontainer.addView(TextView(requireContext()).apply {
-                setPadding(0, 0, 0, 50)
+                setPadding(0, 0, 0, padding)
             })
         }
         return root
