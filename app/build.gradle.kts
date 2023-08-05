@@ -73,8 +73,10 @@ dependencies {
 
     // Google vision text recognition
     implementation("com.google.mlkit:text-recognition:16.0.0")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.6.4")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.7.0")
 
     // OpenAI
     implementation("com.aallam.openai:openai-client:3.3.0")
+    implementation("io.ktor:ktor-client-core:2.3.1")
+    implementation("io.ktor:ktor-client-android:2.3.1")
 }

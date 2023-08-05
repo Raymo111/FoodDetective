@@ -17,6 +17,13 @@ import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import com.aallam.openai.api.BetaOpenAI
+import com.aallam.openai.api.chat.ChatCompletionRequest
+import com.aallam.openai.api.chat.ChatMessage
+import com.aallam.openai.api.chat.ChatRole
+import com.aallam.openai.api.completion.CompletionRequest
+import com.aallam.openai.api.model.ModelId
+import com.aallam.openai.client.OpenAI
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.text.TextRecognition
 import com.google.mlkit.vision.text.latin.TextRecognizerOptions
@@ -79,8 +86,34 @@ class CameraFragment : Fragment() {
         }
     }
 
+    @OptIn(BetaOpenAI::class)
     private suspend fun chatGPTit(input: String): String {
-        return ""
+        val instructions = """You will be provided with a list of food ingredient names.
+For each ingredient with a chemical name, respond with a description its purpose and a description of its health effects.
+Make sure to emphasize any risks of cancer or organ damage.
+Each ingredient result should be about 30 words."""
+        val openai = OpenAI(token = OPENAI_API_KEY)
+        val response = openai.chatCompletion(
+            ChatCompletionRequest(
+                model = ModelId("gpt-3.5-turbo"),
+                messages = listOf(
+                    ChatMessage(
+                        role = ChatRole.System,
+                        content = instructions
+                    ),
+                    ChatMessage(
+                        role = ChatRole.User,
+                        content = input
+                    )
+                ),
+                temperature = 0.4,
+                maxTokens = 120 * input.split(',').size,
+                topP = 1.0,
+                frequencyPenalty = 0.0,
+                presencePenalty = 0.0
+            )
+        )
+        return response.choices[0].message?.content?: ""
     }
 
     private fun takePhoto() {
@@ -123,6 +156,8 @@ class CameraFragment : Fragment() {
                             val text = ocrPhoto(output.savedUri!!)
                             Log.d(TAG, "OCR result: $text")
                             val res = chatGPTit(text)
+                            Log.d(TAG, "ChatGPT result: $res")
+                            Toast.makeText(baseContext, res, Toast.LENGTH_LONG).show()
                         }
                     }
                 }
