@@ -162,9 +162,7 @@ Each ingredient result should be about 30 words."""
                             val file = File(baseContext.filesDir, "captures/$name.txt")
                             file.writeText(res)
 
-                            // Redirect to gallery fragment
-                            (context as MainActivity).findNavController(R.id.nav_host_fragment_content_main)
-                                .navigate(R.id.nav_history)
+                            Toast.makeText(baseContext, "Parsing complete, check your result in History!", Toast.LENGTH_LONG).show()
                         }
                     }
                 }
