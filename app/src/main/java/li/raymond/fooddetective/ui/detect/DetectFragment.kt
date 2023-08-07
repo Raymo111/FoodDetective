@@ -1,4 +1,4 @@
-package li.raymond.fooddetective.ui.camera
+package li.raymond.fooddetective.ui.detect
 
 import android.net.Uri
 import android.os.Bundle
@@ -14,7 +14,7 @@ import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.findNavController
+import androidx.navigation.findNavController
 import com.aallam.openai.api.BetaOpenAI
 import com.aallam.openai.api.chat.ChatCompletionRequest
 import com.aallam.openai.api.chat.ChatMessage
@@ -28,7 +28,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import li.raymond.fooddetective.MainActivity.Companion.FILENAME_FORMAT
 import li.raymond.fooddetective.MainActivity.Companion.TAG
-import li.raymond.fooddetective.databinding.FragmentCameraBinding
+import li.raymond.fooddetective.databinding.FragmentDetectBinding
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -36,11 +36,12 @@ import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 import kotlinx.coroutines.tasks.await
 import li.raymond.fooddetective.BuildConfig
+import li.raymond.fooddetective.MainActivity
 import li.raymond.fooddetective.R
 
-class CameraFragment : Fragment() {
+class DetectFragment : Fragment() {
 
-    private var _binding: FragmentCameraBinding? = null
+    private var _binding: FragmentDetectBinding? = null
 
     private var imageCapture: ImageCapture? = null
     private lateinit var cameraExecutor: ExecutorService
@@ -54,7 +55,7 @@ class CameraFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentCameraBinding.inflate(inflater, container, false)
+        _binding = FragmentDetectBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
         // Set up the listeners for take photo and video capture buttons
@@ -111,7 +112,7 @@ Each ingredient result should be about 30 words."""
                 presencePenalty = 0.0
             )
         )
-        return response.choices[0].message?.content?: ""
+        return response.choices[0].message?.content ?: ""
     }
 
     private fun takePhoto() {
@@ -162,7 +163,8 @@ Each ingredient result should be about 30 words."""
                             file.writeText(res)
 
                             // Redirect to gallery fragment
-                            findNavController().navigate(R.id.nav_history)
+                            (context as MainActivity).findNavController(R.id.nav_host_fragment_content_main)
+                                .navigate(R.id.nav_history)
                         }
                     }
                 }

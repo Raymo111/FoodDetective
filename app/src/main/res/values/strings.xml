@@ -6,7 +6,7 @@
 	<string name="nav_header_subtitle">Raymond Li</string>
 	<string name="nav_header_desc">Navigation header</string>
 
-	<string name="menu_home">Detect</string>
+	<string name="menu_detect">Detect</string>
 	<string name="menu_history">History</string>
 
 	<string name="take_photo">Take Photo</string>
